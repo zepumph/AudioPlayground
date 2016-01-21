@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Audio Playground</string>
     <string name="play">PLAY</string>
+    <string name="stop">STOP</string>
 </resources>
