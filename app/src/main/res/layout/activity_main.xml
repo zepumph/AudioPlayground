@@ -10,6 +10,11 @@
     tools:context="mobilecomputing.com.audioplayground.MainActivity"
     android:orientation="vertical">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/play_tone"/>
     <NumberPicker
         android:id="@+id/note_picker"
         android:layout_width="wrap_content"
@@ -22,6 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="toggleTone"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/metronome"/>
 
     <NumberPicker
         android:id="@+id/bpm_picker"

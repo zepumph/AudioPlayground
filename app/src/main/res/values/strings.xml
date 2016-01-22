@@ -3,4 +3,7 @@
     <string name="play">PLAY</string>
     <string name="stop">STOP</string>
     <string name="start">START</string>
+    <string name="use_a_tune">LOOKS LIKE YOU COULD USE A TUNE, AMIRITE?</string>
+    <string name="play_tone">Play a Tone!</string>
+    <string name="metronome">Metronome!!</string>
 </resources>
