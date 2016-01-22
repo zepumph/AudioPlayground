@@ -3,6 +3,7 @@ package mobilecomputing.com.audioplayground;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,6 +16,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String ERROR = "ERROR";
@@ -22,10 +25,15 @@ public class MainActivity extends AppCompatActivity {
 
     private final static String NOTES[] = {"A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab"};
     String currentNote = "note_a";
-    int currentBPM = 100;
+    int currentBPM = 30;
 
     MediaPlayer mp_tone;
-    MediaPlayer mp_met;
+    SoundPool sp;
+    boolean spLoaded = false;
+    private int soundID;
+
+
+
 
 
     @Override
@@ -36,23 +44,15 @@ public class MainActivity extends AppCompatActivity {
         initiateNotePicker();
         initiateBPMPicker();
         mp_tone = MediaPlayer.create(getApplicationContext(), R.raw.note_a);
-        mp_met = MediaPlayer.create(getApplicationContext(), R.raw.tic);
-        mp_met.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+        sp = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        sp.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
-            public void onCompletion(MediaPlayer mp) {
-//                mp.reset();
-//                AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(R.raw.tic);
-//
-//                try {
-//                    mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//            //        mp.prepare();
-//
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
+            public void onLoadComplete(SoundPool soundPool, int sampleId,int status) {
+                spLoaded = true;
             }
         });
+        soundID = sp.load(this, R.raw.tic, 1);
 
     }
 
@@ -148,28 +148,27 @@ public class MainActivity extends AppCompatActivity {
         TimerTask tone = new TimerTask(){
             @Override
             public void run(){
-                try {
-                    mp_met.start();
-                    mp_met.reset();
-                    mp_met.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                    mp_met.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (spLoaded) {
+                    sp.play(soundID, 1, 1, 1, 0, 1f);
                 }
-
             }
         };
 
         if( toggleMet.getText().equals(getString(R.string.start))) {
             toggleMet.setText(R.string.stop);
-            timer.scheduleAtFixedRate(tone, 0, 1000 / currentBPM + 1);
+
+            timer.scheduleAtFixedRate(tone, 0, 60000/ currentBPM + 1);
         }
 
         else if (toggleMet.getText().equals((getString(R.string.stop)))){
 
             toggleMet.setText((R.string.start));
-            tone.cancel();
+            Log.e("TTTTTTTTT", "STOPPING");
             timer.cancel();
+            timer.purge();
+            timer = null;
+
+            tone.cancel();
         }
         else{
             Log.e(ERROR, "Metronome play button not set correctly");
