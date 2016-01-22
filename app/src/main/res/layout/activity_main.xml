@@ -14,11 +14,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textSize="20sp"
         android:text="@string/play_tone"/>
+
     <NumberPicker
         android:id="@+id/note_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_gravity="center_horizontal"/>
 
     <Button
@@ -26,19 +30,25 @@
         android:text = "@string/play"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="toggleTone"/>
+        android:onClick="toggleTone"
+        android:layout_marginBottom="20dp"/>
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textStyle="normal"
+        android:textSize="20sp"
         android:text="@string/metronome"/>
 
     <NumberPicker
         android:id="@+id/bpm_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:textColor="#FFFFFF"
         android:layout_gravity="center_horizontal"/>
+
     <Button
         android:text="@string/start"
         android:id="@+id/btn_metronome"
