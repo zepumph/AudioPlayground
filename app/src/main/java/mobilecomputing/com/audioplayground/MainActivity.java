@@ -1,11 +1,10 @@
 package mobilecomputing.com.audioplayground;
 
-import android.app.Activity;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +13,7 @@ import android.widget.NumberPicker;
 import java.io.IOException;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     public static final String ERROR = "ERROR";
 
@@ -53,13 +52,10 @@ public class MainActivity extends Activity {
             try {
                 mp.reset();
                 mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-    //            String path = getExternalFilesDir(null).toString() + "/";
-    //            Log.d("MEDIA_PLAYER", "IN PATH:  " + path);
-//                String path = "android.resource://"+getPackageName()+"/raw/" ;
-//                Log.d("MEDIA_PLAYER" , "path: " + getPackageName() + currentNote);
-                String resourcePath = "mobilecomputing.com.audioplayground/raw/" + currentNote + ".mp3";
+
                 AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(note_id);
                 mp.setDataSource( afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                mp.setLooping(true);
                 mp.prepare();
             }
             catch (IOException e){
@@ -68,9 +64,6 @@ public class MainActivity extends Activity {
                 Log.e(ERROR, "Data source not set, defaulting to note E:  " + e.getMessage(),e);
 
             }
-    //        Toast t = Toast.makeText(getApplicationContext(), currentNote, Toast.LENGTH_LONG);
-    //        t.show();
-
 
                 playButton.setText(R.string.stop);
                 Log.d("MEDIA_PLAYER", "IN STart:    ");
@@ -81,9 +74,9 @@ public class MainActivity extends Activity {
             playButton.setText(R.string.play);
             Log.d("MEDIA_PLAYER", "IN STOP:    ");
 
-            //set volume fade
+            //set volume fade, currently not working I think
             float speed = .05f;
-            for (float vol= 1; vol>.5; vol -= speed){
+            for (float vol= 1; vol>.2; vol -= speed){
                 mp.setVolume( vol, vol);
             }
             mp.pause();
