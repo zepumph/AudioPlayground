@@ -44,47 +44,49 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void playStop(View view){
-        final Button playButton = (Button) findViewById(R.id.btn_play);
+        final Button playStopButton = (Button) findViewById(R.id.btn_play);
 
-        if( playButton.getText().equals(getString(R.string.play))) {
-            int note_id = this.getResources().getIdentifier(currentNote, "raw",
-                    this.getPackageName());
-            try {
-                mp.reset();
-                mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-                AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(note_id);
-                mp.setDataSource( afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                mp.setLooping(true);
-                mp.prepare();
-            }
-            catch (IOException e){
-                mp = MediaPlayer.create(MainActivity.this, R.raw.note_e);
-
-                Log.e(ERROR, "Data source not set, defaulting to note E:  " + e.getMessage(),e);
-
-            }
-
-                playButton.setText(R.string.stop);
-                Log.d("MEDIA_PLAYER", "IN STart:    ");
-
-                mp.start();
+        if( playStopButton.getText().equals(getString(R.string.play))) {
+            play(playStopButton);
         }
-        else if (playButton.getText().equals((getString(R.string.stop)))){
-            playButton.setText(R.string.play);
-            Log.d("MEDIA_PLAYER", "IN STOP:    ");
-
-            //set volume fade, currently not working I think
-            float speed = .05f;
-            for (float vol= 1; vol>.2; vol -= speed){
-                mp.setVolume( vol, vol);
-            }
-            mp.pause();
-            mp.reset();
-//            myMediaPlayer.reset();
+        else if (playStopButton.getText().equals((getString(R.string.stop)))){
+            stop(playStopButton);
         }
         else{
             Log.e(ERROR, "playbutton not set correctly");
         }
+    }
+
+    public void play(Button playButton){
+        int note_id = this.getResources().getIdentifier(currentNote, "raw",
+                this.getPackageName());
+        try {
+            mp.reset();
+            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+            AssetFileDescriptor afd = getApplicationContext().getResources().openRawResourceFd(note_id);
+            mp.setDataSource( afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mp.setLooping(true);
+            mp.prepare();
+        }
+        catch (IOException e){
+            mp = MediaPlayer.create(MainActivity.this, R.raw.note_e);
+            Log.e(ERROR, "Data source not set, defaulting to note E:  " + e.getMessage(),e);
+        }
+
+        playButton.setText(R.string.stop);
+        mp.start();
+    }
+    public void stop(Button stopButton){
+        stopButton.setText(R.string.play);
+
+        //set volume fade, currently not working I think
+        float speed = .05f;
+        for (float vol= 1; vol>.2; vol -= speed){
+            mp.setVolume( vol, vol);
+        }
+        mp.pause();
+        mp.reset();
+        mp.setVolume(1.f,1.f);
     }
 }
